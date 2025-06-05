@@ -28,6 +28,8 @@ public class Usuario {
     private String estado;
     private String pais;
     private LocalDate dataNascimento;  // Adicionando o campo de data de nascimento
+    private boolean confessou;
+
     @Relationship(type = "TEM_AVATAR", direction = Relationship.Direction.OUTGOING)
     private Avatar avatar;
 

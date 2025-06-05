@@ -1,0 +1,20 @@
+Exemplo prático:
+java
+Copiar
+Editar
+@Node("Ambiente")
+public class Ambiente {
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @Relationship(type = "PARTICIPA", direction = Relationship.Direction.OUTGOING)
+    private List<Usuario> usuarios;
+}
+Aqui:
+
+Ambiente é o nó de origem.
+
+Cada Usuario na lista é o nó de destino.
+
+O relacionamento PARTICIPA vai do Ambiente para o Usuario.

@@ -15,16 +15,26 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Avatar {
+
     @Id
     @GeneratedValue
     private Long id;
 
-    private String skin;
-    private String especie; // humano, urso, robô, etc.
-    private String status; // online, offline, em jogo
+    private String pele;
+    private String especies;
+    private String status;
     private String nomeVisual;
 
-    @Relationship(type = "TEM", direction = Relationship.Direction.OUTGOING)
-    private List<Avatar> avatares;
+    // Relacionamento com Skin
+    @Relationship(type = "TEM_SKIN", direction = Relationship.Direction.OUTGOING)
+    private List<Skin> skins;
+
+    // Relacionamento com Usuario (dono do avatar)
+    @Relationship(type = "E_DONO", direction = Relationship.Direction.INCOMING)
     private Usuario dono;
+
+    // Relacionamento sem direção, só declare o tipo, sem direction
+    @Relationship(type = "AMIGO_DE")
+    private List<Avatar> amigos;
+
 }
