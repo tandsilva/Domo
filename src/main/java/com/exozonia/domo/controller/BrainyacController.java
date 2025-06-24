@@ -1,6 +1,7 @@
 package com.exozonia.domo.controller;
 
-
+import com.exozonia.domo.dto.BrainyacDto;
+import com.exozonia.domo.mapper.BrainyacMapper;
 import com.exozonia.domo.model.Conhecimento;
 import com.exozonia.domo.service.BrainyacLearningService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,16 +19,18 @@ public class BrainyacController {
     public String perguntar(@RequestParam String pergunta) {
         return learningService.consultar(pergunta);
     }
-
-    // Endpoint para ensinar (salvar nova pergunta e resposta)
-    // Recebe um objeto Conhecimento no corpo da requisição em JSON
+//converte o json em objeto java
+    // Endpoint para ensinar (usando DTO + Mapper)
     @PostMapping("/ensinar")
-    public String ensinar(@RequestBody Conhecimento conhecimento) {
-        if (conhecimento.getPergunta() == null || conhecimento.getPergunta().trim().isEmpty()
-                || conhecimento.getResposta() == null || conhecimento.getResposta().trim().isEmpty()) {
+    public String ensinar(@RequestBody BrainyacDto dto) {
+        if (dto.getPergunta() == null || dto.getPergunta().trim().isEmpty()
+                || dto.getResposta() == null || dto.getResposta().trim().isEmpty()) {
             return "Erro: pergunta e resposta são obrigatórias.";
         }
+
+        Conhecimento conhecimento = BrainyacMapper.toEntity(dto);
         learningService.ensinar(conhecimento.getPergunta(), conhecimento.getResposta());
+
         return "Aprendi algo novo!";
     }
 }
