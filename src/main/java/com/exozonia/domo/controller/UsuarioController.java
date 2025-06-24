@@ -17,8 +17,14 @@ public class UsuarioController {
     private UsuarioService service;
 
     @PostMapping("/confessar")
-    public ResponseEntity<String> fazerConfissao(@RequestParam String frase, @AuthenticationPrincipal Usuario usuario) {
+    public ResponseEntity<String> fazerConfissao(
+            @RequestParam String frase,
+            @AuthenticationPrincipal Usuario usuario) {
         try {
+            if (usuario == null) {
+                return ResponseEntity.status(401).body("Usuário não autenticado.");
+            }
+
             service.fazerConfissao(usuario.getId(), frase);
             return ResponseEntity.ok("Confissão aceita. Bem-vindo!");
         } catch (IllegalArgumentException e) {
@@ -33,18 +39,23 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public List<Usuario> listar() {
-        return service.listarTodos();
+    public ResponseEntity<List<Usuario>> listar() {
+        return ResponseEntity.ok(service.listarTodos());
     }
 
-    @GetMapping("/{id}")
-    public Usuario buscarPorId(@PathVariable Long id) {
-        return service.buscarPorId(id);
+    @GetMapping("/id/{id}")
+    public ResponseEntity<Usuario> buscarPorId(@PathVariable Long id) {
+        Usuario usuario = service.buscarPorId(id);
+        if (usuario != null) {
+            return ResponseEntity.ok(usuario);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    @DeleteMapping("/{id}")
-    public void deletar(@PathVariable Long id) {
+    @DeleteMapping("/id/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
         service.deletar(id);
+        return ResponseEntity.noContent().build();
     }
-
 }
