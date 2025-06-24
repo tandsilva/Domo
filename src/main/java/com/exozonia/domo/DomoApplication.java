@@ -39,27 +39,32 @@ public class DomoApplication implements CommandLineRunner {
 		}
 
 		// Cadastra usuário
-		Usuario usuario = new Usuario();
-		usuario.setNome("Fernanda");
-		usuario.setGamerTag("ExoMistes");
-		usuario.setEmail("Lucas@ss.com");
-		usuario.setTelefone("11999999999");
-		usuario.setEndereco("Rua das Galáxias, 49");
-		usuario.setCidade("araraCity");
-		usuario.setEstado("SP");
-		usuario.setPais("Brasil");
-
-		usuarioService.salvar(usuario);
-		System.out.println("🔥 Usuário cadastrado com sucesso!");
+//		Usuario usuario = new Usuario();
+//		usuario.setNome("Fernanda");
+//		usuario.setGamerTag("ExoMistes");
+//		usuario.setEmail("Lucas@ss.com");
+//		usuario.setTelefone("11999999999");
+//		usuario.setEndereco("Rua das Galáxias, 49");
+//		usuario.setCidade("araraCity");
+//		usuario.setEstado("SP");
+//		usuario.setPais("Brasil");
+//
+//		usuarioService.salvar(usuario);
+//		System.out.println("🔥 Usuário cadastrado com sucesso!");
 
 		// Ensinar o Brainyac (salvar no banco)
-		brainyacLearningService.ensinar("quem eh Voce", "Tudo certo ?");
-		brainyacLearningService.ensinar("onde voce mora?", "Eu vivo na nuvem, em servidores seguros.");
+		brainyacLearningService.ensinar("qual eh seu nome ?", "Brainyac ?");
+		brainyacLearningService.ensinar("Como se sente", "feliz.");
 //
-//		// Consultar e imprimir as respostas
-		System.out.println(" brainyacLearningService thiago teste: " + brainyacLearningService);
-//		System.out.println("Pergunta: qual seu nome?");
-		System.out.println("Resposta: " + brainyacLearningService.consultar("qual seu nome?"));
+////		// Consultar e imprimir as respostas
+//		System.out.println(" brainyacLearningService thiago teste: " + brainyacLearningService);
+////		System.out.println("Pergunta: qual seu nome?");
+
+		brainyacLearningService.ensinar("Qual carro vc gosta?", "Porche!");
+		System.out.println("Resposta: " + brainyacLearningService.consultar("Qual carro vc gosta?"));
+
+
+		//System.out.println("Resposta: " + brainyacLearningService.consultar("banana?"));
 
 
 

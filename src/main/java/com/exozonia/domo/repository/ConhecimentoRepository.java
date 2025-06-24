@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository
-public interface ConhecimentoRepository extends Neo4jRepository<Conhecimento, String> {
-    Optional<Conhecimento> findByPergunta(String pergunta);
-}
+    @Repository
+    public interface ConhecimentoRepository extends Neo4jRepository<Conhecimento, String> {
+//        Optional<Conhecimento> findByPergunta(String pergunta);
+    }

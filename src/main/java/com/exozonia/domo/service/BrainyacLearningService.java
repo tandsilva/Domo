@@ -88,6 +88,10 @@ public class BrainyacLearningService {
      * @return a resposta encontrada ou uma resposta padrão genérica
      */
     public String consultar(String pergunta) {
-        return consultar(pergunta, "Desculpe, ainda não sei responder isso.");
+        String chave = pergunta.toLowerCase().trim();
+
+        return conhecimentoRepository.findById(chave)
+                .map(Conhecimento::getResposta)
+                .orElse("Ainda não sei isso.");
     }
 }

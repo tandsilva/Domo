@@ -17,6 +17,7 @@ public class Skin {
     @Id
     @GeneratedValue
     private Long id;
+    private String imagemPath; // caminho da imagem salva
 
     private String nome; // Nome da skin (ex: "Skin do Robô", "Skin de Urso")
 
