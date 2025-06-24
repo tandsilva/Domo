@@ -1,5 +1,7 @@
 package com.exozonia.domo.controller;
 
+import com.exozonia.domo.dto.UsuarioDto;
+import com.exozonia.domo.mapper.UsuarioMapper;
 import com.exozonia.domo.model.Usuario;
 import com.exozonia.domo.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/usuarios")
@@ -33,21 +36,26 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<Usuario> criar(@RequestBody Usuario usuario) {
-        Usuario salvo = service.salvar(usuario);
-        return ResponseEntity.status(201).body(salvo);
+    public ResponseEntity<UsuarioDto> criar(@RequestBody UsuarioDto usuario) {
+        Usuario entity = UsuarioMapper.toEntity(usuario);
+        Usuario salvo = service.salvar(entity);
+        return ResponseEntity.status(201).body(UsuarioMapper.toDto(salvo));
     }
 
     @GetMapping
-    public ResponseEntity<List<Usuario>> listar() {
-        return ResponseEntity.ok(service.listarTodos());
+    public ResponseEntity<List<UsuarioDto>> listar() {
+        List<UsuarioDto> usuarios = service.listarTodos()
+                .stream()
+                .map(UsuarioMapper::toDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(usuarios);
     }
 
     @GetMapping("/id/{id}")
-    public ResponseEntity<Usuario> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<UsuarioDto> buscarPorId(@PathVariable Long id) {
         Usuario usuario = service.buscarPorId(id);
         if (usuario != null) {
-            return ResponseEntity.ok(usuario);
+            return ResponseEntity.ok(UsuarioMapper.toDto(usuario));
         } else {
             return ResponseEntity.notFound().build();
         }
