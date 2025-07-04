@@ -6,7 +6,7 @@ Backend desenvolvido em **Java + Spring Boot**, com persistência orientada a gr
 
 ## 💠 Tecnologias
 
-* Java 17
+* Java 21
 * Spring Boot
 * Spring Data Neo4j
 * Docker
