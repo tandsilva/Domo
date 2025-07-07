@@ -29,12 +29,21 @@ public class Usuario {
     private String pais;
     private LocalDate dataNascimento;  // Adicionando o campo de data de nascimento
     private boolean confessou;
-
-    @Relationship(type = "TEM_AVATAR", direction = Relationship.Direction.OUTGOING)
-    private Avatar avatar;
+//
+//    @Relationship(type = "TEM_AVATAR", direction = Relationship.Direction.OUTGOING)
+//    private Avatar avatar;
+//
+//    @Relationship(type = "PARTICIPA", direction = Relationship.Direction.OUTGOING)
+//    private Ambiente ambiente;
+@Relationship(type = "TEM_AVATAR", direction = Relationship.Direction.OUTGOING)
+@ToString.Exclude
+@EqualsAndHashCode.Exclude
+private transient Avatar avatar;
 
     @Relationship(type = "PARTICIPA", direction = Relationship.Direction.OUTGOING)
-    private Ambiente ambiente;
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private transient Ambiente ambiente;
     // Método para calcular a idade
     public int getIdade() {
         if (dataNascimento == null) {

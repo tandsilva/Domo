@@ -1,6 +1,4 @@
 package com.exozonia.domo;
-
-import com.exozonia.domo.model.Usuario;
 import com.exozonia.domo.service.UsuarioService;
 import com.exozonia.domo.service.BrainyacLearningService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +13,10 @@ public class DomoApplication implements CommandLineRunner {
 
 	private final UsuarioService usuarioService;
 	private final BrainyacLearningService brainyacLearningService;
+	// Anotação que diz ao Spring para injetar automaticamente as dependências no construtor
+	// O Spring passa as instâncias necessárias quando cria o objeto DomoApplication
+	// Atribui o serviço de usuario recebido à variável da classe
+	// Atribui o serviço de aprendizado da IA à variável da classe
 
 	@Autowired
 	public DomoApplication(UsuarioService usuarioService, BrainyacLearningService brainyacLearningService) {
@@ -60,8 +62,8 @@ public class DomoApplication implements CommandLineRunner {
 //		System.out.println(" brainyacLearningService thiago teste: " + brainyacLearningService);
 ////		System.out.println("Pergunta: qual seu nome?");
 
-		brainyacLearningService.ensinar("Qual carro vc gosta?", "Porche!");
-		System.out.println("Resposta: " + brainyacLearningService.consultar("Qual carro vc gosta?"));
+		brainyacLearningService.ensinar("Qual cor voce gosta?", "verde!");
+		System.out.println("Resposta: " + brainyacLearningService.consultar("Qual cor voce gosta?"));
 
 
 		//System.out.println("Resposta: " + brainyacLearningService.consultar("banana?"));

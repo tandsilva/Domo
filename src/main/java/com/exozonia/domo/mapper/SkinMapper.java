@@ -21,7 +21,7 @@ public class SkinMapper {
         SkinDto dto = new SkinDto();
         dto.setNome(skin.getNome());
         dto.setCor(skin.getCor());
-        dto.setImagemPath(skin.getImagemPath());
+
         return dto;
     }
 }

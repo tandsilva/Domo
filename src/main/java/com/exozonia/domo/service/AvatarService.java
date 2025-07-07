@@ -5,6 +5,7 @@ import com.exozonia.domo.mapper.SkinMapper;
 import com.exozonia.domo.model.Avatar;
 import com.exozonia.domo.model.Skin;
 import com.exozonia.domo.repository.AvatarRepository;
+import com.exozonia.domo.repository.SkinRepository;
 import com.exozonia.domo.util.AvatarUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,8 +28,9 @@ public class AvatarService {
     }
 
     public Avatar salvar(Avatar avatar) {
-        if (avatar.getSkins() == null || avatar.getPele().isEmpty()) {
-            throw new IllegalArgumentException("Você ainda não comprou uma skin.");
+        // Não exigimos mais skins na criação do Avatar
+        if (avatar.getPele() == null || avatar.getPele().isEmpty()) {
+            throw new IllegalArgumentException("A pele não pode estar vazia.");
         }
         return avatarRepository.save(avatar);
     }
@@ -53,48 +55,75 @@ public class AvatarService {
         });
     }
 
-    public boolean adicionarSkinAoAvatar(Long idAvatar, SkinDto dto, MultipartFile imagem) {
+//    public boolean adicionarSkinAoAvatar(Long idAvatar, SkinDto dto, MultipartFile imagem) {
+//        Optional<Avatar> optionalAvatar = avatarRepository.findById(idAvatar);
+//        if (optionalAvatar.isEmpty()) return false;
+//
+//        Avatar avatar = optionalAvatar.get();
+//
+//        if (avatar.getSkins() == null) {
+//            avatar.setSkins(new ArrayList<>());
+//        }
+//
+//        boolean existe = avatar.getSkins().stream()
+//                .anyMatch(skin -> skin.getNome().equalsIgnoreCase(dto.getNome()));
+//
+//        if (existe) return false;
+//
+//        // Salvar imagem
+//        String caminhoImagem = salvarImagem(imagem);
+//        if (caminhoImagem == null) return false;
+//
+//        // Mapear SkinDto para Skin
+//        Skin novaSkin = SkinMapper.toEntity(dto, avatar, caminhoImagem);
+//
+//        avatar.getSkins().add(novaSkin);
+//        avatarRepository.save(avatar);
+//        return true;
+//    }
+//
+//    private String salvarImagem(MultipartFile imagem) {
+//        String nomeImagem = UUID.randomUUID() + "_" + imagem.getOriginalFilename();
+//        String caminho = "uploads/skins/" + nomeImagem;
+//        File destino = new File(caminho);
+//
+//        destino.getParentFile().mkdirs(); // Garante que o diretório existe
+//
+//        try {
+//            imagem.transferTo(destino);
+//            return caminho;
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
+@Autowired
+private SkinRepository skinRepository;
+
+    public boolean adicionarSkinAoAvatar(Long idAvatar, Long idSkin) {
         Optional<Avatar> optionalAvatar = avatarRepository.findById(idAvatar);
         if (optionalAvatar.isEmpty()) return false;
 
+        Optional<Skin> optionalSkin = skinRepository.findById(idSkin);
+        if (optionalSkin.isEmpty()) return false;
+
         Avatar avatar = optionalAvatar.get();
+        Skin skin = optionalSkin.get();
 
         if (avatar.getSkins() == null) {
             avatar.setSkins(new ArrayList<>());
         }
 
         boolean existe = avatar.getSkins().stream()
-                .anyMatch(skin -> skin.getNome().equalsIgnoreCase(dto.getNome()));
+                .anyMatch(s -> s.getId().equals(skin.getId()));
 
         if (existe) return false;
 
-        // Salvar imagem
-        String caminhoImagem = salvarImagem(imagem);
-        if (caminhoImagem == null) return false;
-
-        // Mapear SkinDto para Skin
-        Skin novaSkin = SkinMapper.toEntity(dto, avatar, caminhoImagem);
-
-        avatar.getSkins().add(novaSkin);
+        avatar.getSkins().add(skin);
         avatarRepository.save(avatar);
         return true;
     }
 
-    private String salvarImagem(MultipartFile imagem) {
-        String nomeImagem = UUID.randomUUID() + "_" + imagem.getOriginalFilename();
-        String caminho = "uploads/skins/" + nomeImagem;
-        File destino = new File(caminho);
-
-        destino.getParentFile().mkdirs(); // Garante que o diretório existe
-
-        try {
-            imagem.transferTo(destino);
-            return caminho;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
     public boolean atualizarSkin(Long skinId, String nome, String cor) {
         List<Avatar> avatares = avatarRepository.findAll();
 

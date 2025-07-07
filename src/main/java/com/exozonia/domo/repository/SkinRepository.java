@@ -1,14 +1,16 @@
 package com.exozonia.domo.repository;
 
 
+
+import com.exozonia.domo.model.Skin;
 import com.exozonia.domo.model.Usuario;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UsuarioRepository extends Neo4jRepository<Usuario, Long> {
-    // Aqui você pode criar consultas personalizadas se quiser, exemplo:
-    Usuario findByGamerTag(String gamerTag);
+public interface    SkinRepository extends Neo4jRepository<Skin, Long> {
     boolean existsByNome(String nome);
-    boolean existsByEmail(String email);
+
+
+    // Você pode colocar consultas customizadas aqui, se precisar.
 }
