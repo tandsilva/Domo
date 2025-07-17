@@ -10,7 +10,7 @@ import org.springframework.data.neo4j.config.AbstractNeo4jConfig;
 import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 
 @Configuration
-@EnableNeo4jRepositories(basePackages = "com.ExoZonia.Domo.repository")  // <-- aqui, pacote correto
+//@EnableNeo4jRepositories(basePackages = "com.exozonia.domo.repository")  // <-- aqui, pacote correto
 public class Neo4jConfig extends AbstractNeo4jConfig {
 
     @Value("${spring.neo4j.uri}")

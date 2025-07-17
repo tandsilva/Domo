@@ -99,13 +99,13 @@ public class AvatarService {
 //    }
 @Autowired
 private SkinRepository skinRepository;
-
     public boolean adicionarSkinAoAvatar(Long idAvatar, Long idSkin) {
         Optional<Avatar> optionalAvatar = avatarRepository.findById(idAvatar);
-        if (optionalAvatar.isEmpty()) return false;
-
         Optional<Skin> optionalSkin = skinRepository.findById(idSkin);
-        if (optionalSkin.isEmpty()) return false;
+
+        if (optionalAvatar.isEmpty() || optionalSkin.isEmpty()) {
+            return false; // Avatar ou Skin não encontrados
+        }
 
         Avatar avatar = optionalAvatar.get();
         Skin skin = optionalSkin.get();
@@ -114,15 +114,44 @@ private SkinRepository skinRepository;
             avatar.setSkins(new ArrayList<>());
         }
 
+        // Verifica se a skin já está associada pelo ID
         boolean existe = avatar.getSkins().stream()
                 .anyMatch(s -> s.getId().equals(skin.getId()));
 
-        if (existe) return false;
+        if (existe) {
+            return false; // Skin já associada
+        }
 
+        // Associa a skin e salva o avatar
         avatar.getSkins().add(skin);
         avatarRepository.save(avatar);
+
         return true;
     }
+
+//    public boolean adicionarSkinAoAvatar(Long idAvatar, Long idSkin) {
+//        Optional<Avatar> optionalAvatar = avatarRepository.findById(idAvatar);
+//        if (optionalAvatar.isEmpty()) return false;
+//
+//        Optional<Skin> optionalSkin = skinRepository.findById(idSkin);
+//        if (optionalSkin.isEmpty()) return false;
+//
+//        Avatar avatar = optionalAvatar.get();
+//        Skin skin = optionalSkin.get();
+//
+//        if (avatar.getSkins() == null) {
+//            avatar.setSkins(new ArrayList<>());
+//        }
+//
+//        boolean existe = avatar.getSkins().stream()
+//                .anyMatch(s -> s.getId().equals(skin.getId()));
+//
+//        if (existe) return false;
+//
+//        avatar.getSkins().add(skin);
+//        avatarRepository.save(avatar);
+//        return true;
+//    }
 
     public boolean atualizarSkin(Long skinId, String nome, String cor) {
         List<Avatar> avatares = avatarRepository.findAll();
