@@ -8,6 +8,8 @@ import org.springframework.data.neo4j.core.schema.Relationship;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.ArrayList;
+import java.util.List;
 
 @Node("Usuario")
 @Data  // Lombok já gera getters, setters, toString, equals e hashCode
@@ -39,6 +41,10 @@ public class Usuario {
 @ToString.Exclude
 @EqualsAndHashCode.Exclude
 private transient Avatar avatar;
+    @Relationship(type = "REALIZOU_LOGIN", direction = Relationship.Direction.OUTGOING)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private List<Login> logins = new ArrayList<>();
 
     @Relationship(type = "PARTICIPA", direction = Relationship.Direction.OUTGOING)
     @ToString.Exclude
