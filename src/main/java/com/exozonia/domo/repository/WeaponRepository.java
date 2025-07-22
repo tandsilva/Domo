@@ -9,6 +9,8 @@ import java.util.List;
 
 @Repository
 
-public interface WeaponRepository extends Neo4jRepository<Weapon, String> {
-    List<Weapon> findByName(String name);
+public interface WeaponRepository extends Neo4jRepository<Weapon, Long>
+ {
+    boolean existsByName(String name);
 }
+

@@ -7,6 +7,7 @@
     import com.exozonia.domo.repository.UsuarioRepository;
     import com.exozonia.domo.service.UsuarioService;
     import org.springframework.beans.factory.annotation.Autowired;
+    import org.springframework.http.HttpStatus;
     import org.springframework.http.ResponseEntity;
     import org.springframework.security.core.annotation.AuthenticationPrincipal;
     import org.springframework.web.bind.annotation.*;
@@ -62,6 +63,15 @@
                 return ResponseEntity.ok(UsuarioMapper.toDto(atualizado));
             } catch (IllegalArgumentException e) {
                 return ResponseEntity.notFound().build();
+            }
+        }
+        @PostMapping("/{usuarioId}/arma/{armaId}")
+        public ResponseEntity<String> associarArmaAoUsuario(@PathVariable Long usuarioId, @PathVariable Long armaId) {
+            boolean sucesso = service.associarArma(usuarioId, armaId);
+            if (sucesso) {
+                return ResponseEntity.ok("Arma associada ao usuário com sucesso!");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário ou arma não encontrados.");
             }
         }
 

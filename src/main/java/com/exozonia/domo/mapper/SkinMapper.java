@@ -8,7 +8,7 @@ public class SkinMapper {
     public static Skin toEntity(SkinDto dto) {
         Skin skin = new Skin();
         skin.setNome(dto.getNome());
-        skin.setCor(dto.getCor());
+
         return skin;
     }
 
@@ -16,7 +16,7 @@ public class SkinMapper {
         SkinDto dto = new SkinDto();
         dto.setId(skin.getId());                // adiciona o id
         dto.setNome(skin.getNome());
-        dto.setCor(skin.getCor());
+
 
         return dto;
     }

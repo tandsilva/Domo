@@ -1,5 +1,6 @@
 package com.exozonia.domo.service;
 
+import com.exozonia.domo.enums.SkinTipo;
 import com.exozonia.domo.model.Skin;
 import com.exozonia.domo.repository.SkinRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,14 +41,30 @@ public class SkinService {
         }
         return false;
     }
-
-    public boolean atualizar(Long id, String nome, String cor) {
+    public boolean atualizar(Long id, String nome, String tipo) {
         Skin skin = repository.findById(id).orElse(null);
         if (skin == null) return false;
 
         skin.setNome(nome);
-        skin.setCor(cor);
+
+        try {
+            SkinTipo tipoEnum = SkinTipo.valueOf(tipo.toUpperCase());
+            skin.setTipo(tipoEnum);
+        } catch (IllegalArgumentException e) {
+            return false; // tipo inválido
+        }
+
         repository.save(skin);
         return true;
     }
+
+//    public boolean atualizar(Long id, String nome, String cor) {
+//        Skin skin = repository.findById(id).orElse(null);
+//        if (skin == null) return false;
+//
+//        skin.setNome(nome);
+//
+//        repository.save(skin);
+//        return true;
+//    }
 }

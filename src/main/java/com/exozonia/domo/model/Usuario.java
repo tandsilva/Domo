@@ -45,6 +45,10 @@ private transient Avatar avatar;
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private List<Login> logins = new ArrayList<>();
+    @Relationship(type = "POSSUI_ARMA", direction = Relationship.Direction.OUTGOING)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private List<Weapon> armas = new ArrayList<>();
 
     @Relationship(type = "PARTICIPA", direction = Relationship.Direction.OUTGOING)
     @ToString.Exclude

@@ -1,7 +1,6 @@
 package com.exozonia.domo.service;
 
-import com.exozonia.domo.dto.SkinDto;
-import com.exozonia.domo.mapper.SkinMapper;
+import com.exozonia.domo.enums.SkinTipo;
 import com.exozonia.domo.model.Avatar;
 import com.exozonia.domo.model.Skin;
 import com.exozonia.domo.repository.AvatarRepository;
@@ -9,10 +8,7 @@ import com.exozonia.domo.repository.SkinRepository;
 import com.exozonia.domo.util.AvatarUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -55,48 +51,7 @@ public class AvatarService {
         });
     }
 
-//    public boolean adicionarSkinAoAvatar(Long idAvatar, SkinDto dto, MultipartFile imagem) {
-//        Optional<Avatar> optionalAvatar = avatarRepository.findById(idAvatar);
-//        if (optionalAvatar.isEmpty()) return false;
-//
-//        Avatar avatar = optionalAvatar.get();
-//
-//        if (avatar.getSkins() == null) {
-//            avatar.setSkins(new ArrayList<>());
-//        }
-//
-//        boolean existe = avatar.getSkins().stream()
-//                .anyMatch(skin -> skin.getNome().equalsIgnoreCase(dto.getNome()));
-//
-//        if (existe) return false;
-//
-//        // Salvar imagem
-//        String caminhoImagem = salvarImagem(imagem);
-//        if (caminhoImagem == null) return false;
-//
-//        // Mapear SkinDto para Skin
-//        Skin novaSkin = SkinMapper.toEntity(dto, avatar, caminhoImagem);
-//
-//        avatar.getSkins().add(novaSkin);
-//        avatarRepository.save(avatar);
-//        return true;
-//    }
-//
-//    private String salvarImagem(MultipartFile imagem) {
-//        String nomeImagem = UUID.randomUUID() + "_" + imagem.getOriginalFilename();
-//        String caminho = "uploads/skins/" + nomeImagem;
-//        File destino = new File(caminho);
-//
-//        destino.getParentFile().mkdirs(); // Garante que o diretório existe
-//
-//        try {
-//            imagem.transferTo(destino);
-//            return caminho;
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            return null;
-//        }
-//    }
+
 @Autowired
 private SkinRepository skinRepository;
     public boolean adicionarSkinAoAvatar(Long idAvatar, Long idSkin) {
@@ -129,39 +84,23 @@ private SkinRepository skinRepository;
         return true;
     }
 
-//    public boolean adicionarSkinAoAvatar(Long idAvatar, Long idSkin) {
-//        Optional<Avatar> optionalAvatar = avatarRepository.findById(idAvatar);
-//        if (optionalAvatar.isEmpty()) return false;
-//
-//        Optional<Skin> optionalSkin = skinRepository.findById(idSkin);
-//        if (optionalSkin.isEmpty()) return false;
-//
-//        Avatar avatar = optionalAvatar.get();
-//        Skin skin = optionalSkin.get();
-//
-//        if (avatar.getSkins() == null) {
-//            avatar.setSkins(new ArrayList<>());
-//        }
-//
-//        boolean existe = avatar.getSkins().stream()
-//                .anyMatch(s -> s.getId().equals(skin.getId()));
-//
-//        if (existe) return false;
-//
-//        avatar.getSkins().add(skin);
-//        avatarRepository.save(avatar);
-//        return true;
-//    }
 
-    public boolean atualizarSkin(Long skinId, String nome, String cor) {
+    public boolean atualizarSkin(Long skinId, String nome, String tipo) {
         List<Avatar> avatares = avatarRepository.findAll();
+
+        SkinTipo tipoEnum;
+        try {
+            tipoEnum = SkinTipo.valueOf(tipo.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return false; // tipo inválido, aborta atualização
+        }
 
         for (Avatar avatar : avatares) {
             if (avatar.getSkins() != null) {
                 for (Skin skin : avatar.getSkins()) {
                     if (skin.getId() != null && skin.getId().equals(skinId)) {
                         skin.setNome(nome);
-                        skin.setCor(cor);
+                        skin.setTipo(tipoEnum);  // agora usa o enum
                         avatarRepository.save(avatar);
                         return true;
                     }
@@ -169,8 +108,9 @@ private SkinRepository skinRepository;
             }
         }
 
-        return false;
+        return false; // skinId não encontrada
     }
+
 
     public boolean deletarSkinPorId(Long skinId) {
         List<Avatar> avatares = avatarRepository.findAll();
