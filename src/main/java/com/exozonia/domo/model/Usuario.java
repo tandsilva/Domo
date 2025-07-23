@@ -1,10 +1,7 @@
 package com.exozonia.domo.model;
 
 import lombok.*;
-import org.springframework.data.neo4j.core.schema.Id;
-import org.springframework.data.neo4j.core.schema.Node;
-import org.springframework.data.neo4j.core.schema.GeneratedValue;
-import org.springframework.data.neo4j.core.schema.Relationship;
+import org.springframework.data.neo4j.core.schema.*;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -20,11 +17,13 @@ public class Usuario {
     @Id
     @GeneratedValue
     private Long id;
-
+    private String senha;
     private String nome;
     private String gamerTag;
     private String email;
     private String telefone;
+    @Property("cpf")  // ou só declare, dependendo da versão do Spring Data Neo4
+    private String cpf;
     private String endereco;
     private String cidade;
     private String estado;

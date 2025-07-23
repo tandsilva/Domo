@@ -13,8 +13,13 @@ public class UsuarioMapper {
         dto.setGamerTag(usuario.getGamerTag());
         dto.setEmail(usuario.getEmail());
         dto.setTelefone(usuario.getTelefone());
+        dto.setEndereco(usuario.getEndereco());
+        dto.setCidade(usuario.getCidade());
+        dto.setEstado(usuario.getEstado());
+        dto.setPais(usuario.getPais());
         return dto;
     }
+
 
     public static Usuario toEntity(UsuarioDto dto) {
 
