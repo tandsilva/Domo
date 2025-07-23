@@ -1,11 +1,20 @@
 package com.exozonia.domo.mapper;
 
+// Importa os DTOs e a entidade que serão usados na conversão
 import com.exozonia.domo.dto.UsuarioDto;
 import com.exozonia.domo.dto.UsuarioUpdateDto;
 import com.exozonia.domo.model.Usuario;
 
+/**
+ * Classe utilitária responsável por converter entre a entidade Usuario
+ * e seus respectivos DTOs (Data Transfer Objects).
+ */
 public class UsuarioMapper {
 
+    /**
+     * Converte um objeto Usuario (entidade) para UsuarioDto.
+     * Usado geralmente para retornar dados ao cliente sem expor tudo.
+     */
     public static UsuarioDto toDto(Usuario usuario) {
         UsuarioDto dto = new UsuarioDto();
         dto.setId(usuario.getId());
@@ -20,12 +29,13 @@ public class UsuarioMapper {
         return dto;
     }
 
-
+    /**
+     * Converte um UsuarioDto para a entidade Usuario.
+     * Útil em operações de criação (POST) ou leitura de dados recebidos.
+     */
     public static Usuario toEntity(UsuarioDto dto) {
-
-
         Usuario usuario = new Usuario();
-        usuario.setId(dto.getId()); // normalmente omitido no POST
+        usuario.setId(dto.getId()); // Em POST, normalmente esse campo é ignorado
         usuario.setNome(dto.getNome());
         usuario.setGamerTag(dto.getGamerTag());
         usuario.setEmail(dto.getEmail());
@@ -36,6 +46,11 @@ public class UsuarioMapper {
         usuario.setPais(dto.getPais());
         return usuario;
     }
+
+    /**
+     * Atualiza campos de um objeto Usuario com base nos dados de um UsuarioUpdateDto.
+     * Apenas os campos não nulos no DTO serão atualizados.
+     */
     public static void merge(Usuario usuario, UsuarioUpdateDto dto) {
         if (dto.getNome() != null) usuario.setNome(dto.getNome());
         if (dto.getGamerTag() != null) usuario.setGamerTag(dto.getGamerTag());
@@ -46,6 +61,4 @@ public class UsuarioMapper {
         if (dto.getEstado() != null) usuario.setEstado(dto.getEstado());
         if (dto.getPais() != null) usuario.setPais(dto.getPais());
     }
-
-    }
-
+}
