@@ -49,7 +49,32 @@ public class LoginService {
     }
 
     private boolean isCpfValido(String cpf) {
-        // Implementar aqui a validação de CPF real
-        return cpf.matches("\\d{11}"); // Simplesmente valida o formato, não o dígito verificador
+        if (cpf == null || !cpf.matches("\\d{11}") || cpf.chars().distinct().count() == 1) {
+            return false;
+        }
+
+        int[] pesos1 = {10, 9, 8, 7, 6, 5, 4, 3, 2};
+        int[] pesos2 = {11, 10, 9, 8, 7, 6, 5, 4, 3, 2};
+
+        int soma1 = 0, soma2 = 0;
+
+        for (int i = 0; i < 9; i++) {
+            int digito = Character.getNumericValue(cpf.charAt(i));
+            soma1 += digito * pesos1[i];
+            soma2 += digito * pesos2[i];
+        }
+
+        int dv1 = calcularDigitoVerificador(soma1);
+        soma2 += dv1 * pesos2[9];
+        int dv2 = calcularDigitoVerificador(soma2);
+
+        return dv1 == Character.getNumericValue(cpf.charAt(9)) &&
+                dv2 == Character.getNumericValue(cpf.charAt(10));
     }
+
+    private int calcularDigitoVerificador(int soma) {
+        int resto = soma % 11;
+        return (resto < 2) ? 0 : 11 - resto;
+    }
+
 }
