@@ -58,6 +58,7 @@ public class SkinService {
         return true;
     }
 
+
 //    public boolean atualizar(Long id, String nome, String cor) {
 //        Skin skin = repository.findById(id).orElse(null);
 //        if (skin == null) return false;

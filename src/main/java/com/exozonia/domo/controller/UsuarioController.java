@@ -74,6 +74,15 @@
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário ou arma não encontrados.");
             }
         }
+        @PostMapping("/{usuarioId}/skin/{skinId}")
+        public ResponseEntity<String> associarSkinAoUsuario(@PathVariable Long usuarioId, @PathVariable Long skinId) {
+            boolean sucesso = service.associarSkin(usuarioId, skinId);
+            if (sucesso) {
+                return ResponseEntity.ok("Skin associada ao usuário com sucesso!");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário ou skin não encontrados.");
+            }
+        }
 
 
 

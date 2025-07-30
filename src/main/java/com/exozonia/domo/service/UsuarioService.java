@@ -1,12 +1,12 @@
 package com.exozonia.domo.service;
 
-// Importações dos DTOs, modelos e repositórios
-import com.exozonia.domo.dto.UsuarioDto;
 import com.exozonia.domo.dto.UsuarioUpdateDto;
 import com.exozonia.domo.mapper.UsuarioMapper;
 import com.exozonia.domo.model.Login;
+import com.exozonia.domo.model.Skin;
 import com.exozonia.domo.model.Usuario;
 import com.exozonia.domo.model.Weapon;
+import com.exozonia.domo.repository.SkinRepository;
 import com.exozonia.domo.repository.UsuarioRepository;
 import com.exozonia.domo.repository.WeaponRepository;
 
@@ -19,79 +19,75 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Classe de serviço responsável pelas regras de negócio relacionadas ao usuário.
+ * Serviço responsável pelas regras de negócio relacionadas a usuários.
  */
 @Service
 public class UsuarioService {
 
+    private final UsuarioRepository usuarioRepository;
+    private final SkinRepository skinRepository;
+    private final WeaponRepository weaponRepository;
+
     @Autowired
-    private UsuarioRepository repository;
-
-    // Repositório de armas (não está sendo injetado corretamente ainda)
-    private WeaponRepository weaponRepository;
-
-    // DTO declarado mas não utilizado (pode ser removido)
-    private UsuarioDto dto;
+    public UsuarioService(
+            UsuarioRepository usuarioRepository,
+            SkinRepository skinRepository,
+            WeaponRepository weaponRepository) {
+        this.usuarioRepository = usuarioRepository;
+        this.skinRepository = skinRepository;
+        this.weaponRepository = weaponRepository;
+    }
 
     /**
-     * Salva um novo usuário após validações.
+     * Salva um novo usuário com validações básicas.
      */
     public Usuario salvar(Usuario usuario) {
         if (usuario.getNome() == null || usuario.getNome().isEmpty()) {
             throw new IllegalArgumentException("Nome não pode ser vazio");
         }
-
-        // Verifica se já existe usuário com o mesmo nome ou email
-        if (repository.existsByNome(usuario.getNome())) {
+        if (usuarioRepository.existsByNome(usuario.getNome())) {
             throw new IllegalArgumentException("Nome já cadastrado");
         }
-        if (repository.existsByEmail(usuario.getEmail())) {
+        if (usuarioRepository.existsByEmail(usuario.getEmail())) {
             throw new IllegalArgumentException("Email já cadastrado");
         }
-
-        return repository.save(usuario);
+        return usuarioRepository.save(usuario);
     }
 
     /**
-     * Retorna todos os usuários cadastrados.
+     * Lista todos os usuários.
      */
     public List<Usuario> listarTodos() {
-        return repository.findAll();
+        return usuarioRepository.findAll();
     }
 
     /**
-     * Busca um usuário pelo ID.
+     * Busca um usuário pelo ID, retorna null se não existir.
      */
     public Usuario buscarPorId(Long id) {
-        return repository.findById(id).orElse(null);
+        return usuarioRepository.findById(id).orElse(null);
     }
 
     /**
      * Deleta um usuário pelo ID.
      */
     public void deletar(Long id) {
-        repository.deleteById(id);
+        usuarioRepository.deleteById(id);
     }
 
     /**
-     * Atualiza os dados de um usuário com base em um DTO de atualização.
+     * Atualiza um usuário com os dados do DTO de atualização.
      */
     public Usuario atualizar(Long id, UsuarioUpdateDto dto) {
-        Usuario usuario = repository.findById(id)
+        Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
 
-        // Atualiza apenas os campos não nulos
         UsuarioMapper.merge(usuario, dto);
-
-        return repository.save(usuario);
+        return usuarioRepository.save(usuario);
     }
 
-    // Injeção duplicada do repositório de usuário (pode ser unificada com o de cima)
-    @Autowired
-    private UsuarioRepository usuarioRepository;
-
     /**
-     * Registra um login para o usuário, adicionando um novo objeto Login à lista.
+     * Registra um login para o usuário adicionando um novo objeto Login.
      */
     public void registrarLogin(Usuario usuario) {
         if (usuario.getLogins() == null) {
@@ -106,14 +102,14 @@ public class UsuarioService {
     }
 
     /**
-     * Associa uma arma a um usuário, evitando duplicatas.
+     * Associa uma arma a um usuário, evitando duplicação.
      */
     public boolean associarArma(Long usuarioId, Long weaponId) {
         Optional<Usuario> usuarioOpt = usuarioRepository.findById(usuarioId);
         Optional<Weapon> weaponOpt = weaponRepository.findById(weaponId);
 
         if (usuarioOpt.isEmpty() || weaponOpt.isEmpty()) {
-            return false; // Usuário ou arma não encontrados
+            return false;
         }
 
         Usuario usuario = usuarioOpt.get();
@@ -123,7 +119,6 @@ public class UsuarioService {
             usuario.setArmas(new ArrayList<>());
         }
 
-        // Evita adicionar a mesma arma mais de uma vez
         if (!usuario.getArmas().contains(weapon)) {
             usuario.getArmas().add(weapon);
             usuarioRepository.save(usuario);
@@ -131,4 +126,32 @@ public class UsuarioService {
 
         return true;
     }
+
+    /**
+     * Associa uma skin a um usuário, evitando duplicação.
+     */
+
+    public boolean associarSkin(Long usuarioId, Long skinId) {
+        Optional<Usuario> usuarioOpt = usuarioRepository.findById(usuarioId);
+        Optional<Skin> skinOpt = skinRepository.findById(skinId);
+
+        if (usuarioOpt.isEmpty() || skinOpt.isEmpty()) {
+            return false; // usuário ou skin não encontrados
+        }
+
+        Usuario usuario = usuarioOpt.get();
+        Skin skin = skinOpt.get();
+
+        if (usuario.getSkins() == null) {
+            usuario.setSkins(new ArrayList<>());
+        }
+
+        if (!usuario.getSkins().contains(skin)) {
+            usuario.getSkins().add(skin);
+            usuarioRepository.save(usuario);
+        }
+
+        return true;
+    }
+
 }

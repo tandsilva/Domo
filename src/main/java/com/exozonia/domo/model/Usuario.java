@@ -1,3 +1,4 @@
+
 package com.exozonia.domo.model;
 
 // Importações do Lombok para reduzir boilerplate
@@ -5,6 +6,7 @@ import lombok.*;
 
 // Importações do Spring Data Neo4j para mapeamento de grafos
 import org.springframework.data.neo4j.core.schema.*;
+import com.exozonia.domo.model.Login;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -45,12 +47,16 @@ public class Usuario {
 
     // Campo booleano indicando se o usuário confessou algo (lógica de jogo?)
     private boolean confessou;
-
-    // Relacionamento com o nó Avatar (um para um)
+    // Relacionamento com múltiplas skins que o usuário possui
     @Relationship(type = "TEM_AVATAR", direction = Relationship.Direction.OUTGOING)
-    @ToString.Exclude // Evita loops ao gerar toString
-    @EqualsAndHashCode.Exclude // Evita loops ao gerar equals/hashCode
-    private transient Avatar avatar; // transient: não serializa esse campo
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private List<Avatar> avatares = new ArrayList<>();
+
+    @Relationship(type = "POSSUI_SKIN", direction = Relationship.Direction.OUTGOING)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private List<Skin> skins = new ArrayList<>();
 
     // Relacionamento com múltiplos logins realizados pelo usuário
     @Relationship(type = "REALIZOU_LOGIN", direction = Relationship.Direction.OUTGOING)
