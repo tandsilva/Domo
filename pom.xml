@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
@@ -39,16 +40,44 @@
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-			<version>2.2.0</version> <!-- ou versÃĢo mais recente compatÃ­vel com Spring Boot 3 -->
+			<version>2.2.0</version>
 		</dependency>
+		<dependency>
+			<groupId>edu.stanford.nlp</groupId>
+			<artifactId>stanford-corenlp</artifactId>
+			<version>4.5.4</version> <!-- ou a versão mais recente -->
+		</dependency>
+
+
+		<!-- Modelos do CoreNLP -->
+		<dependency>
+			<groupId>edu.stanford.nlp</groupId>
+			<artifactId>stanford-corenlp</artifactId>
+			<version>4.5.1</version>
+			<classifier>models</classifier>
+		</dependency>
+
+		<!-- Suporte para CoreNLP em inglês (opcional) -->
+		<dependency>
+			<groupId>edu.stanford.nlp</groupId>
+			<artifactId>stanford-corenlp</artifactId>
+			<version>4.5.1</version>
+			<classifier>models-english</classifier>
+		</dependency>
+
+		<!-- Suporte para CoreNLP em espanhol (opcional) -->
+		<dependency>
+			<groupId>edu.stanford.nlp</groupId>
+			<artifactId>stanford-corenlp</artifactId>
+			<version>4.5.1</version>
+			<classifier>models-spanish</classifier>
+		</dependency>
+
+		<!-- Logging para evitar warnings -->
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-amqp</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-neo4j</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

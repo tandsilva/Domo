@@ -21,6 +21,7 @@
 
         @Autowired
         private UsuarioService service;
+        @Autowired
         private UsuarioRepository repository;
 
 

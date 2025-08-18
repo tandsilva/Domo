@@ -25,4 +25,6 @@ public class InteracaoIA {
 
     @Relationship(type = "REALIZADA_POR")
     private Usuario usuario;
+    @Relationship(type = "ANALIZADO_COM")
+    private Sentimento sentimento;
 }
