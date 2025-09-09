@@ -58,7 +58,7 @@ public class DomoApplication implements CommandLineRunner {
 		brainyacLearningService.ensinar("qual eh seu nome ?", "Brainyac ?");
 		brainyacLearningService.ensinar("Como se sente", "feliz.");
 //
-////		// Consultar e imprimir as respostas
+
 //		System.out.println(" brainyacLearningService thiago teste: " + brainyacLearningService);
 ////		System.out.println("Pergunta: qual seu nome?");
 
